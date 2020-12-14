@@ -1,4 +1,4 @@
-## Please update this file with a new version anytime this projest is updated
+## Please update this file with a new version 
 
 Version: [0.1]
 Date: [2020-12-14]
