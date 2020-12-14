@@ -29,7 +29,7 @@ We also expect that Terraform and Ansible has been installed already on machine 
 4. Run ```ansible-playbook play.yml -i hosts``` (this will configure both nodes as a part of cluster and run necessary containers)
 
 ## How to test?
-In Hetzner cloud console find public IP of a cluster and just paste this IP to a webbrowser. In case that cluster is up&running a "Welcome screen" what is showing your IP is visible.
+In Hetzner cloud console find public IP of a cluster and just paste this IP to a webbrowser. In case that cluster is up&running a "Real Visit Result screen" what is showing your IP is visible.
 
 ## What next? and technical debt
 To extend this POC it should be necessary to improve security (as we are using "root" account) and make it fully automated using some (example Gitlab) pipeline. 
