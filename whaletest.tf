@@ -1,7 +1,3 @@
-# Set the variable value in *.tfvars file
-# or using the -var="hcloud_token=..." CLI option
-#variable "hcloud_token" {6CyqBPOG2qgaAgP69xhygaxK4w81Cl0UJSpNhnfYaqotPoIYdQOMo2QwJtVwuQsC}
-
 # Configure the Hetzner Cloud Provider
 terraform {
   required_providers {
@@ -11,11 +7,11 @@ terraform {
   }
 }
 
-
 provider "hcloud" {
   token = "6CyqBPOG2qgaAgP69xhygaxK4w81Cl0UJSpNhnfYaqotPoIYdQOMo2QwJtVwuQsC"
 }
 
+# Cloud network configuration
 resource "hcloud_network" "TestPrivNet" {
   name = "TestPrivNet"
   ip_range = "10.1.0.0/16"
@@ -40,14 +36,6 @@ resource "hcloud_server_network" "Connection2" {
   ip = "10.1.1.2"
 }
 
-resource "hcloud_server_network" "Connection3" {
-  server_id = hcloud_server.testmachine.id
-  network_id = hcloud_network.TestPrivNet.id
-  ip = "10.1.1.3"
-}
-
-
-
 resource "hcloud_load_balancer" "test_load_balancer" {
   name       = "test-load-balancer"
   load_balancer_type = "lb11"
@@ -67,8 +55,7 @@ resource "hcloud_load_balancer_service" "load_balancer_service" {
     protocol = "http"
 }
 
-
-# Create a server
+# Cluster of two nodes and SSH keys addition
 resource "hcloud_server" "node1" {
   name = "node1"
   image = "ubuntu-20.04"
@@ -83,17 +70,11 @@ resource "hcloud_server" "node2" {
   ssh_keys=["${data.hcloud_ssh_key.ssh_key.id}"]
 }
 
-resource "hcloud_server" "testmachine" {
-  name = "testmachine"
-  image = "ubuntu-20.04"
-  server_type = "cx11"
-  ssh_keys=["${data.hcloud_ssh_key.ssh_key.id}"]
-}
-
 data "hcloud_ssh_key" "ssh_key" {
   fingerprint = "a6:e9:13:23:97:2b:5e:9d:f6:4c:2a:2b:72:50:72:ea"
 }
 
+# Inventory file for Ansible
 resource "local_file" "inventory" {
   content = <<EOF
   [node1]
@@ -108,8 +89,7 @@ resource "local_file" "inventory" {
 
   [nodes:vars]
   ansible_user=root
-  ansible__ssh_private_key=id.rsa
-
+  ansible_ssh_private_key=id_rsa
 
   EOF
   filename = "hosts"
