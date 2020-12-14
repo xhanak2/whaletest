@@ -7,37 +7,27 @@
         upgrade: yes
         update_cache: yes
         cache_valid_time: 86400
-      register: out
-    - debug: var=out.stdout_lines
 
     - name: Prereq installation
       apt: 
         name={{ item }} state=latest update_cache=yes
       loop: ['apt-transport-https','ca-certificates','curl','gnupg-agent','software-properties-common']
-      register: out
-    - debug: var=out.stdout_lines
     
     - name: Add Docker GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
-      register: out
-    - debug: var=out.stdout_lines
 
     - name: Add Docker repo
       apt_repository: 
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
         state: present
-      register: out
-    - debug: var=out.stdout_lines
 
     - name: APT update&upgrade
       apt: 
         upgrade: yes
         update_cache: yes
         cache_valid_time: 86400
-      register: out
-    - debug: var=out.stdout_lines
 
     - name: Docker installation
       apt: 
@@ -45,13 +35,9 @@
         state=latest
         update_cache=yes
       loop: ['docker-ce','docker-ce-cli','containerd.io']
-      register: out
-    - debug: var=out.stdout_lines
 
     - name: Docker Hello-world
       shell: "docker run hello-world"
-      register: out
-    - debug: var=out.stdout_lines
 
 - name: Simpleweb installation
   hosts: nodes
@@ -59,10 +45,6 @@
   tasks: 
   - name: Docker pull Yeasy
     shell: "docker pull yeasy/simple-web:latest"
-    register: out
-  - debug: var=out.stdout_lines
 
   - name : Docker run
     shell: "docker run -d -p 80:80 yeasy/simple-web:latest"
-    register: out
-  - debug: var=out.stdout_lines
